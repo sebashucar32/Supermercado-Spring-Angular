@@ -1,31 +1,12 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-	<head>
-		<meta charset="UTF-8" />
-		<title th:text="${titulo}">Inserte titulo aqui</title>
-		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
-	</head>
+	<head th:replace="diseño/producto :: head"></head>
 	<body>
-		<nav class="navbar navbar-expand-lg" style="background-color: rgb(27, 3, 3);">
-			<a class="navbar-brand" style="color:white" href="#">Supermercado</a>
-			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-				<span class="navbar-toggler-icon"></span>
-			</button>
-			<div class="collapse navbar-collapse" id="navbarNav">
-				<ul class="navbar-nav">
-					<li class="nav-item active">
-						<a class="nav-link" style="color:white" href="#">Inicio<span class="sr-only">(current)</span></a>
-					</li>
-		            <li class="nav-item">
-		                <a class="nav-link" style="color:white" th:href="@{/listarProductos}">Productos</a>
-		            </li>
-				</ul>
-			</div>
-		</nav>
+		<header th:replace="diseño/producto :: header"></header>
 		
 		<div class="container">
 			<h1 class="text-center border border-success border-top-0 border-left-0 border-right-0" style="color: rgb(76, 50, 172);" th:text="${titulo}"></h1>
-			<p><a th:href="@{/crearProducto}" class="btn btn-success btn-xs">Crear Producto</a></p>
+			<p><a th:href="@{/crearProducto}" class="btn btn-primary btn-xs">Crear Producto</a></p>
 			
 			<table class="table table-striped">
 				<thead>
@@ -46,16 +27,14 @@
 						<td th:text="${producto.categoria}"></td>
 						<td th:text="${producto.precio}"></td>
 						<td th:text="${producto.fechaProducto}"></td>
-						<td><a class="btn btn-primary btn-xs" th:href="@{/crearProducto/} + ${producto.id}" th:text="'Editar'"></a></td>
+						<td><a class="btn btn-warning btn-xs" th:href="@{/crearProducto/} + ${producto.id}" th:text="'Editar'"></a></td>
 						<td><a class="btn btn-danger btn-xs" th:href="@{/eliminarProducto/} + ${producto.id}" th:text="'Eliminar'" onclick="return confirm('Estas seguro que deseas eliminar el producto');"></a></td>
 					</tr>
 				</tbody>
 			</table>
 		</div>
 		
-		<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
-		<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+		<footer style="width:100%" th:replace="diseño/producto :: footer"></footer>
 	</body>
 </html>
 

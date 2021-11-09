@@ -16,19 +16,19 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 
-import com.sebastian.supermercado.app.models.dao.IProductoDao;
 import com.sebastian.supermercado.app.models.entity.Producto;
+import com.sebastian.supermercado.app.models.services.IProductoService;
 
 @Controller
 @SessionAttributes("producto")
 public class ProductoController {
 	@Autowired
-	private IProductoDao productoDao;
+	private IProductoService productoService;
 	
 	@RequestMapping(value="/listarProductos", method=RequestMethod.GET)
 	public String listarProductos(Model model) {
 		model.addAttribute("titulo", "Listado de Productos");
-		model.addAttribute("productos", productoDao.buscarTodos());
+		model.addAttribute("productos", productoService.buscarTodos());
 		return "mostrarProductos";
 	}
 	
@@ -45,7 +45,7 @@ public class ProductoController {
 		Producto producto = null;
 		
 		if(id > 0) {
-			producto = productoDao.buscarUno(id);
+			producto = productoService.buscarUno(id);
 		} else {
 			return "redirect:/mostrarProductos";
 		}
@@ -62,7 +62,7 @@ public class ProductoController {
 			return "crearProducto";
 		}
 		
-		productoDao.guardar(producto);
+		productoService.guardar(producto);
 		status.setComplete();
 		return "redirect:/listarProductos";
 	}
@@ -70,7 +70,7 @@ public class ProductoController {
 	@GetMapping(value="/eliminarProducto/{id}")
 	public String eliminarProducto(@PathVariable(value="id") Long id) {
 		if(id > 0) {
-			productoDao.eliminar(id);
+			productoService.eliminar(id);
 		}
 		
 		return "redirect:/listarProductos";

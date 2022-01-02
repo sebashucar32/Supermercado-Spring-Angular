@@ -1,78 +1,64 @@
 package com.sebastian.supermercado.app.controllers;
 
-import java.util.Map;
-
-import javax.validation.Valid;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.SessionAttributes;
-import org.springframework.web.bind.support.SessionStatus;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
 
-import com.sebastian.supermercado.app.models.entity.Producto;
+import com.sebastian.supermercado.app.dto.ProductoDto;
 import com.sebastian.supermercado.app.models.services.IProductoService;
 
-@Controller
-@SessionAttributes("producto")
+@RestController
+@RequestMapping("/api/supermercado")
+@CrossOrigin(origins={"http://localhost:4200"})
 public class ProductoController {
 	@Autowired
 	private IProductoService productoService;
 	
-	@RequestMapping(value="/listarProductos", method=RequestMethod.GET)
-	public String listarProductos(Model model) {
-		model.addAttribute("titulo", "Listado de Productos");
-		model.addAttribute("productos", productoService.buscarTodos());
-		return "mostrarProductos";
+	@GetMapping("/mostrarproductos")
+	public List<ProductoDto> listarProductos() {
+		return productoService.buscarTodos();
 	}
 	
-	@GetMapping(value="/crearProducto")
-	public String crearProducto(Map<String, Object> model) {
-		Producto producto = new Producto();
-		model.put("titulo", "Crea tu Producto");
-		model.put("producto", producto);
-		return "crearProducto";
+	@GetMapping("/producto/{id}")
+	public ProductoDto mostrarProducto(@PathVariable Long id) {
+		return productoService.buscarUno(id);
 	}
 	
-	@GetMapping(value="/crearProducto/{id}")
-	public String editarProducto(@PathVariable(value="id") Long id, Map<String, Object> model) {
-		Producto producto = null;
-		
-		if(id > 0) {
-			producto = productoService.buscarUno(id);
-		} else {
-			return "redirect:/mostrarProductos";
-		}
-		
-		model.put("titulo", "Editar Producto");
-		model.put("producto", producto);
-		return "crearProducto";
-	}
-	
-	@PostMapping(value="/crearProducto")
-	public String guardarProducto(@Valid Producto producto, BindingResult resultado, Model model, SessionStatus status) {
-		if(resultado.hasErrors()) {
-			model.addAttribute("titulo", "Crea tu Producto");
-			return "crearProducto";
-		}
-		
+	@PostMapping("/producto")
+	@ResponseStatus(HttpStatus.CREATED)
+	public ProductoDto crearProducto(@RequestBody ProductoDto producto) {
 		productoService.guardar(producto);
-		status.setComplete();
-		return "redirect:/listarProductos";
+		return producto;
 	}
 	
-	@GetMapping(value="/eliminarProducto/{id}")
-	public String eliminarProducto(@PathVariable(value="id") Long id) {
-		if(id > 0) {
-			productoService.eliminar(id);
-		}
+	@PutMapping("/producto/{id}")
+	@ResponseStatus(HttpStatus.CREATED)
+	public ProductoDto actualizarProducto(@RequestBody ProductoDto producto, @PathVariable Long id) {
+		ProductoDto productoActual = productoService.buscarUno(id);
 		
-		return "redirect:/listarProductos";
+		productoActual.setNombre(producto.getNombre());
+		productoActual.setCategoria(producto.getCategoria());
+		productoActual.setFechaProducto(producto.getFechaProducto());
+		productoActual.setPrecio(producto.getPrecio());
+		productoService.guardar(productoActual);
+		
+		return productoActual;
+	}
+	
+	@DeleteMapping("/producto/{id}")
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+	public void borrarProducto(@PathVariable Long id) {
+		productoService.eliminar(id);
 	}
 }

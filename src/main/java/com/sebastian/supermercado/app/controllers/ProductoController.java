@@ -1,9 +1,7 @@
 package com.sebastian.supermercado.app.controllers;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,11 +10,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.sebastian.supermercado.app.dto.ProductoDto;
 import com.sebastian.supermercado.app.models.services.IProductoService;
+import com.sebastian.supermercado.app.response.ProductoResponse;
 
 @RestController
 @RequestMapping("/api/supermercado")
@@ -26,39 +24,32 @@ public class ProductoController {
 	private IProductoService productoService;
 	
 	@GetMapping("/mostrarproductos")
-	public List<ProductoDto> listarProductos() {
-		return productoService.buscarTodos();
+	public ResponseEntity<ProductoResponse> listarProductos() {
+		ResponseEntity<ProductoResponse> productosResponse = productoService.buscarProductos();
+		return productosResponse;
 	}
 	
 	@GetMapping("/producto/{id}")
-	public ProductoDto mostrarProducto(@PathVariable Long id) {
-		return productoService.buscarUno(id);
+	public ResponseEntity<ProductoResponse> mostrarProducto(@PathVariable Long id) {
+		ResponseEntity<ProductoResponse> productosResponse = productoService.mostrarProducto(id);
+		return productosResponse;
 	}
 	
 	@PostMapping("/producto")
-	@ResponseStatus(HttpStatus.CREATED)
-	public ProductoDto crearProducto(@RequestBody ProductoDto producto) {
-		productoService.guardar(producto);
-		return producto;
+	public ResponseEntity<ProductoResponse> crearProducto(@RequestBody ProductoDto producto) {
+		ResponseEntity<ProductoResponse> productosResponse = productoService.crearProducto(producto);
+		return productosResponse;
 	}
 	
 	@PutMapping("/producto/{id}")
-	@ResponseStatus(HttpStatus.CREATED)
-	public ProductoDto actualizarProducto(@RequestBody ProductoDto producto, @PathVariable Long id) {
-		ProductoDto productoActual = productoService.buscarUno(id);
-		
-		productoActual.setNombre(producto.getNombre());
-		productoActual.setCategoria(producto.getCategoria());
-		productoActual.setFechaProducto(producto.getFechaProducto());
-		productoActual.setPrecio(producto.getPrecio());
-		productoService.guardar(productoActual);
-		
-		return productoActual;
+	public ResponseEntity<ProductoResponse> actualizarProducto(@RequestBody ProductoDto producto, @PathVariable Long id) {
+		ResponseEntity<ProductoResponse> productosResponse = productoService.guardarProducto(producto, id);
+		return productosResponse;
 	}
 	
 	@DeleteMapping("/producto/{id}")
-	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void borrarProducto(@PathVariable Long id) {
-		productoService.eliminar(id);
+	public ResponseEntity<ProductoResponse> borrarProducto(@PathVariable Long id) {
+		ResponseEntity<ProductoResponse> productosResponse = productoService.eliminarProducto(id);
+		return productosResponse;
 	}
 }

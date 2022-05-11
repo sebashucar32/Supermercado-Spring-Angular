@@ -1,0 +1,19 @@
+#sidebar-container {
+  min-height: 1000px;
+}
+
+#sidebar-container .logo {
+  padding: .875rem 1.25rem;
+}
+
+#sidebar-container .menu {
+  width: 18rem;
+}
+
+.barra-lateral {
+  background-color: #353c7a;
+}
+
+a {
+  text-decoration: none;
+}

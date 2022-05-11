@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.sebastian.supermercado.app.dto.ProductoDto;
 import com.sebastian.supermercado.app.models.services.IProductoService;
-import com.sebastian.supermercado.app.response.ProductoResponse;
 
 @RestController
 @RequestMapping("/api/supermercado")
@@ -24,32 +23,32 @@ public class ProductoController {
 	private IProductoService productoService;
 	
 	@GetMapping("/mostrarproductos")
-	public ResponseEntity<ProductoResponse> listarProductos() {
-		ResponseEntity<ProductoResponse> productosResponse = productoService.buscarProductos();
+	public ResponseEntity<?> listarProductos() {
+		ResponseEntity<?> productosResponse = productoService.buscarProductos();
 		return productosResponse;
 	}
 	
 	@GetMapping("/producto/{id}")
-	public ResponseEntity<ProductoResponse> mostrarProducto(@PathVariable Long id) {
-		ResponseEntity<ProductoResponse> productosResponse = productoService.mostrarProducto(id);
+	public ResponseEntity<?> mostrarProducto(@PathVariable Long id) {
+		ResponseEntity<?> productosResponse = productoService.mostrarProducto(id);
 		return productosResponse;
 	}
 	
 	@PostMapping("/producto")
-	public ResponseEntity<ProductoResponse> crearProducto(@RequestBody ProductoDto producto) {
-		ResponseEntity<ProductoResponse> productosResponse = productoService.crearProducto(producto);
+	public ResponseEntity<?> crearProducto(@RequestBody ProductoDto producto) {
+		ResponseEntity<?> productosResponse = productoService.crearProducto(producto);
 		return productosResponse;
 	}
 	
 	@PutMapping("/producto/{id}")
-	public ResponseEntity<ProductoResponse> actualizarProducto(@RequestBody ProductoDto producto, @PathVariable Long id) {
-		ResponseEntity<ProductoResponse> productosResponse = productoService.guardarProducto(producto, id);
+	public ResponseEntity<?> actualizarProducto(@RequestBody ProductoDto producto, @PathVariable Long id) {
+		ResponseEntity<?> productosResponse = productoService.guardarProducto(producto, id);
 		return productosResponse;
 	}
 	
 	@DeleteMapping("/producto/{id}")
-	public ResponseEntity<ProductoResponse> borrarProducto(@PathVariable Long id) {
-		ResponseEntity<ProductoResponse> productosResponse = productoService.eliminarProducto(id);
+	public ResponseEntity<?> borrarProducto(@PathVariable Long id) {
+		ResponseEntity<?> productosResponse = productoService.eliminarProducto(id);
 		return productosResponse;
 	}
 }
